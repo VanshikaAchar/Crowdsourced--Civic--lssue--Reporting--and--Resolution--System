@@ -1,0 +1,251 @@
+<!-- filepath: civic-issue/civic-issue/civic.html -->
+<!DOCTYPE html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Civic Issue Portal Login / Sign Up</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+    }
+    nav {
+      background: #0a3d62;
+      padding: 16px 10px;
+      display: flex;
+      gap: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      z-index: 10;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      padding: 6px 12px;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+    nav a:hover {
+      background: #145da0;
+      text-decoration: underline;
+    }
+    .gov-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      margin-bottom: 10px;
+      color: #007bff;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .container {
+      background: #fff;
+      padding: 32px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 1.5px solid #007bff;
+      width: 340px;
+      margin-top: 80px;
+    }
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+      color: #007bff;
+      font-weight: bold;
+      font-size: 1.5rem;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 8px 0;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #b0c4de;
+      font-size: 1rem;
+    }
+    button {
+      width: 100%;
+      padding: 10px;
+      margin-top: 10px;
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: background 0.2s;
+    }
+    button:hover {
+      background: #0056b3;
+    }
+    .toggle {
+      text-align: center;
+      margin-top: 15px;
+      cursor: pointer;
+      color: #007bff;
+      font-weight: bold;
+    }
+    #aboutSection {
+      margin-top: 30px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 1.5px solid #007bff;
+      padding: 32px 24px;
+      max-width: 340px;
+    }
+    #aboutSection ul {
+      padding-left: 20px;
+      color: #145da0;
+      font-size: 1rem;
+    }
+  </style>
+ </head>
+ <body>
+  <!-- Navigation -->
+  <nav>
+    <a href="civic.html">Home</a>
+    <a href="#" onclick="toggleAbout(); return false;">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="Ministries.html">Ministries</a>
+  </nav>
+
+  <div class="container" id="loginContainer">
+    <div class="gov-logo">Civic Issue Portal</div>
+    <!-- Login Form -->
+    <div id="loginForm">
+      <h2>Citizen Login</h2>
+      <form onsubmit="event.preventDefault(); loginUser();">
+        <input type="email" id="loginEmail" placeholder="Official Email" required>
+        <input type="password" id="loginPassword" placeholder="Government ID Password" required>
+        <button type="submit">Login to Portal</button>
+      </form>
+      <div class="toggle" onclick="toggleForms()">New Citizen? Register Here</div>
+    </div>
+
+    <!-- Sign Up Form -->
+    <div id="signUpForm" style="display:none;">
+      <h2>Citizen Registration</h2>
+      <form onsubmit="event.preventDefault(); signUpUser();">
+        <input type="text" id="signUpName" placeholder="Full Name (as per ID)" required>
+        <input type="email" id="signUpEmail" placeholder="Official Email" required>
+        <input type="password" id="signUpPassword" placeholder="Create Password" required>
+        <button type="submit">Register</button>
+      </form>
+      <div class="toggle" onclick="toggleForms()">Already Registered? Login</div>
+    </div>
+  </div>
+
+  <div class="container" id="aboutSection" style="margin-top:30px; display:none;">
+    <h2>About This Project</h2>
+    <p>
+      The Civic Issue Portal empowers citizens to report, track, and vote on local civic issues such as potholes, broken streetlights, sanitation, and more.
+      <br><br>
+      <strong>Features:</strong>
+      <ul style="padding-left:20px;">
+        <li>Report civic problems directly to authorities</li>
+        <li>Vote and support issues raised by others in your locality</li>
+        <li>Track the status of reported issues</li>
+        <li>Access contact information for relevant ministries</li>
+        <li>Secure citizen login and registration</li>
+      </ul>
+      <br>
+      This portal aims to increase transparency, accountability, and community engagement in civic management.
+    </p>
+  </div>
+
+  <div class="container" id="otpSection" style="margin-top:30px; display:none;">
+    <h2>Phone OTP Verification</h2>
+    <input type="text" id="otpPhone" placeholder="Enter your phone number" />
+    <button type="button" onclick="sendOtp()">Send OTP</button>
+    <div id="otpSentMsg" style="color:green; margin-top:8px;"></div>
+    <input type="text" id="otpInput" placeholder="Enter OTP" style="margin-top:10px;" />
+    <button type="button" onclick="verifyOtp()">Verify OTP</button>
+    <div id="otpVerifyMsg" style="margin-top:8px;"></div>
+  </div>
+
+  <script>
+    function toggleForms() {
+      document.getElementById("loginForm").style.display =
+        document.getElementById("loginForm").style.display === "none" ? "block" : "none";
+      document.getElementById("signUpForm").style.display =
+        document.getElementById("signUpForm").style.display === "none" ? "block" : "none";
+    }
+
+    function loginUser() {
+      const email = document.getElementById("loginEmail").value;
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("userName", email);
+      showOtpSection();
+    }
+
+    function signUpUser() {
+      const name = document.getElementById("signUpName").value;
+      localStorage.setItem("loggedIn", "true");
+      localStorage.setItem("userName", name);
+      showOtpSection();
+    }
+
+    function showOtpSection() {
+      document.getElementById("loginContainer").style.display = "none";
+      document.getElementById("aboutSection").style.display = "none";
+      document.getElementById("otpSection").style.display = "block";
+    }
+
+    // OTP logic
+    function sendOtp() {
+      const phone = document.getElementById("otpPhone").value.trim();
+      if (!phone) {
+        document.getElementById("otpSentMsg").textContent = "Please enter your phone number.";
+        document.getElementById("otpSentMsg").style.color = "crimson";
+        return;
+      }
+      // Generate a random 6-digit OTP
+      const otp = Math.floor(100000 + Math.random() * 900000).toString();
+      localStorage.setItem("otp", otp);
+      document.getElementById("otpSentMsg").textContent = "OTP sent! (Demo: " + otp + ")";
+      document.getElementById("otpSentMsg").style.color = "green";
+    }
+
+    function verifyOtp() {
+      const entered = document.getElementById("otpInput").value.trim();
+      const otp = localStorage.getItem("otp");
+      if (entered === otp) {
+        document.getElementById("otpVerifyMsg").textContent = "Phone successfully verified!";
+        document.getElementById("otpVerifyMsg").style.color = "green";
+        setTimeout(function() {
+          window.location.href = "main.html";
+        }, 1200);
+      } else {
+        document.getElementById("otpVerifyMsg").textContent = "Incorrect OTP. Please try again.";
+        document.getElementById("otpVerifyMsg").style.color = "crimson";
+      }
+    }
+
+    function toggleAbout() {
+      var about = document.getElementById("aboutSection");
+      var login = document.getElementById("loginContainer");
+      if (about.style.display === "none" || about.style.display === "") {
+        about.style.display = "block";
+        login.style.display = "none";
+      } else {
+        about.style.display = "none";
+        login.style.display = "block";
+      }
+    }
+  </script>
+ </body>
+</html>

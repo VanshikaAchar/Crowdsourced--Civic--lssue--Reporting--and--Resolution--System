@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Civic Issue Reporting System</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background: #f9f9f9;
+    }
+    nav {
+      background: #0a3d62;
+      padding: 16px 10px;
+      display: flex;
+      gap: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      padding: 6px 12px;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+    nav a:hover {
+      background: #145da0;
+      text-decoration: underline;
+    }
+    .gov-header {
+      text-align: center;
+      background: #eaf6ff;
+      padding: 32px 10px 16px 10px;
+      border-bottom: 2px solid #007bff;
+      margin-bottom: 24px;
+    }
+    .gov-header h1 {
+      color: #007bff;
+      font-size: 2.2rem;
+      margin: 0;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .gov-header .subtitle {
+      color: #333;
+      font-size: 1.1rem;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    .container {
+      display: flex;
+      width: 100%;
+      height: calc(100vh - 50px);
+      background: #f9f9f9;
+    }
+    .left, .right {
+      padding: 32px 24px;
+      box-sizing: border-box;
+      background: #fff;
+      overflow-y: auto;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 1.5px solid #007bff;
+      margin: 16px;
+    }
+    .left { flex: 2; border-right: 1px solid #ddd; }
+    .right { flex: 1; }
+    .issue {
+      border: 1.5px solid #007bff;
+      padding: 14px;
+      margin-bottom: 14px;
+      background: #eaf6ff;
+      border-radius: 6px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+    }
+    .issue-title {
+      font-weight: bold;
+      margin-bottom: 5px;
+      color: #145da0;
+      font-size: 1.1rem;
+    }
+    .votes {
+      margin-top: 5px;
+    }
+    .address {
+      margin-top: 4px;
+      font-size: 14px;
+      color: #444;
+      font-style: italic;
+    }
+    button.vote-btn, button.submit-btn, .reset-btn {
+      margin-top: 10px;
+      padding: 8px 12px;
+      font-size: 14px;
+      cursor: pointer;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-weight: bold;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: background 0.2s;
+    }
+    button.vote-btn:hover, button.submit-btn:hover, .reset-btn:hover {
+      background-color: #0056b3;
+    }
+    textarea, input {
+      width: 100%;
+      padding: 10px;
+      margin-top: 8px;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #b0c4de;
+      font-size: 1rem;
+    }
+    #welcomeMsg {
+      font-weight: bold;
+      margin: 10px;
+      color: #007bff;
+      text-align: center;
+      font-size: 1.2rem;
+    }
+    .saved-info {
+      margin-top: 15px;
+      padding: 10px;
+      background: #eaf6ff;
+      border-radius: 5px;
+      border: 1px solid #b0c4de;
+      color: #145da0;
+    }
+    /* Progress bar styles */
+    #progressBar {
+      width: 0%;
+      height: 30px;
+      background-color: #007bff;
+      border-radius: 6px;
+      margin-top: 16px;
+      transition: width 0.5s;
+    }
+    #progressValue {
+      font-weight: bold;
+      color: #145da0;
+      margin-top: 8px;
+      text-align: center;
+    }
+    form input[type="button"] {
+      background: #007bff;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      padding: 8px 16px;
+      font-weight: bold;
+      margin-right: 8px;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    form input[type="button"]:hover {
+      background: #0056b3;
+    }
+    /* OTP section styles */
+    .otp-section {
+      background: #fff;
+      max-width: 520px;
+      margin: 32px auto;
+      padding: 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 1.5px solid #007bff;
+    }
+    .otp-section h2 {
+      color: #007bff;
+      font-size: 1.3rem;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+    .otp-section label {
+      font-weight: bold;
+      color: #145da0;
+    }
+    .otp-section input, .otp-section button {
+      padding: 8px;
+      margin: 6px 0;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: 4px;
+      border: 1px solid #b0c4de;
+      font-size: 1rem;
+    }
+    .otp-section button {
+      background: #007bff;
+      color: white;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+    .otp-section button:hover {
+      background: #0056b3;
+    }
+    .otp-section .small {
+      font-size: .9rem;
+      color: #555;
+      margin-bottom: 8px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="main.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="ministries.html">Ministries</a>
+    <a href="civic.html" onclick="logout()">Logout</a>
+  </nav>
+
+  <div class="gov-header">
+    <h1>Civic Issue Reporting System</h1>
+    <div class="subtitle">Official Government Portal for Civic Issues</div>
+  </div>
+
+  <div id="welcomeMsg"></div>
+
+  <div class="container">
+    <div class="left">
+      <h2>Reported Issues</h2>
+      <div id="issuesList"></div>
+
+      <h3>Suggest another issue</h3>
+      <input type="text" id="newTitle" placeholder="Issue title" />
+      <textarea id="newDesc" placeholder="Describe the issue here..."></textarea>
+      <input type="text" id="newAddress" placeholder="Address of the road" />
+      <!-- Add photo upload below address -->
+      <input type="file" id="issuePhoto" accept="image/*" style="margin-top:8px;">
+      <img id="photoPreview" src="" alt="Photo Preview" style="display:none; width:100%; margin-top:8px; border-radius:6px;"/>
+      <button class="submit-btn" onclick="addIssue()">Submit Issue</button>
+      <button class="reset-btn" onclick="resetIssues()">Reset Issues</button>
+    </div>
+
+    <div class="right">
+      <h2>User Information</h2>
+      <label for="name">Full Name</label>
+      <input id="name" type="text" placeholder="Enter your full name" />
+      <label for="email">Email ID</label>
+      <input id="email" type="email" placeholder="Enter your email" />
+      <p style="text-align:center;">OR</p>
+      <label for="phone">Phone Number</label>
+      <input id="phone" type="tel" placeholder="Enter your phone number" />
+      <button class="submit-btn" onclick="saveUser()">Save Details</button>
+
+      <div class="saved-info">
+        <h3>Saved User Info:</h3>
+        <p id="savedUser">No details saved yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Redirect if not logged in
+    if (localStorage.getItem("loggedIn") !== "true") {
+      window.location.href = "index.html";
+    }
+
+    // Welcome user
+    const userName = localStorage.getItem("userName") || "User";
+    document.getElementById("welcomeMsg").innerText = `Welcome, ${userName}! 👋`;
+
+    // Default issues with address
+    const defaultIssues = [
+      { title: "Potholes on Main Street", desc: "Many potholes causing traffic issues.", address: "Main Street, Sector 15", votes: 12 },
+      { title: "Streetlights not functioning", desc: "Dark streets causing safety concerns.", address: "Park Lane, Block A", votes: 8 }
+    ];
+
+    let issues = JSON.parse(localStorage.getItem("issues")) || defaultIssues;
+
+    function saveIssues() { localStorage.setItem("issues", JSON.stringify(issues)); }
+
+    function renderIssues() {
+      const list = document.getElementById("issuesList");
+      list.innerHTML = "";
+      issues.forEach((issue, index) => {
+        const div = document.createElement("div");
+        div.className = "issue";
+        div.innerHTML = `
+          <div class="issue-title">${issue.title}</div>
+          <div>${issue.desc}</div>
+          <div class="address"><strong>Address:</strong> ${issue.address}</div>
+          ${issue.photo ? `<img src="${issue.photo}" alt="Issue Photo" style="width:100%;margin-top:8px;border-radius:6px;">` : ""}
+          <div class="votes">
+            <button class="vote-btn" onclick="vote(${index})">👍 Vote</button>
+            <span>${issue.votes} votes</span>
+          </div>`;
+        list.appendChild(div);
+      });
+    }
+
+    function vote(index) { issues[index].votes++; saveIssues(); renderIssues(); }
+
+    // Photo preview logic
+    document.getElementById("issuePhoto").addEventListener("change", function(e) {
+      const file = e.target.files[0];
+      const preview = document.getElementById("photoPreview");
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(evt) {
+          preview.src = evt.target.result;
+          preview.style.display = "block";
+        };
+        reader.readAsDataURL(file);
+      } else {
+        preview.src = "";
+        preview.style.display = "none";
+      }
+    });
+
+    function addIssue() {
+      const title = document.getElementById("newTitle").value.trim();
+      const desc = document.getElementById("newDesc").value.trim();
+      const address = document.getElementById("newAddress").value.trim();
+      const photoInput = document.getElementById("issuePhoto");
+      let photo = "";
+      if (photoInput.files && photoInput.files[0]) {
+        photo = document.getElementById("photoPreview").src;
+      }
+      if (title && desc && address) {
+        issues.push({ title, desc, address, photo, votes: 0 });
+        saveIssues(); renderIssues();
+        document.getElementById("newTitle").value = "";
+        document.getElementById("newDesc").value = "";
+        document.getElementById("newAddress").value = "";
+        photoInput.value = "";
+        document.getElementById("photoPreview").src = "";
+        document.getElementById("photoPreview").style.display = "none";
+      } else alert("Please enter title, description and address.");
+    }
+
+    function resetIssues() { issues = [...defaultIssues]; saveIssues(); renderIssues(); }
+
+    function logout() { localStorage.clear(); window.location.href = "index.html"; }
+
+    // Save user details
+    function saveUser() {
+      const name = document.getElementById("name").value.trim();
+      const email = document.getElementById("email").value.trim();
+      const phone = document.getElementById("phone").value.trim();
+
+      if (!name && !email && !phone) {
+        alert("Please enter at least one detail (name, email, or phone).");
+        return;
+      }
+
+      const userDetails = { name, email, phone };
+      localStorage.setItem("userDetails", JSON.stringify(userDetails));
+      renderUser();
+    }
+
+    // Show saved user details
+    function renderUser() {
+      const saved = JSON.parse(localStorage.getItem("userDetails"));
+      const display = document.getElementById("savedUser");
+      if (saved) {
+        display.innerHTML = `
+          Name: ${saved.name || "N/A"} <br>
+          Email: ${saved.email || "N/A"} <br>
+          Phone: ${saved.phone || "N/A"}
+        `;
+      } else {
+        display.textContent = "No details saved yet.";
+      }
+    }
+
+    // Initial render
+    renderIssues();
+    renderUser();
+  </script>
+ 
+  </div>
+
+  <h1 style="text-align:center; color:#007bff; margin-top:32px;">Show the progress status of work</h1>
+  <div id="progressBar"></div>
+  <p id="progressValue">0%</p>
+  <form style="text-align:center;">
+    <input type="button" value="View Progress" onclick="msg()">
+    <input type="button" value="Reset" onclick="resetProgressBar()">
+  </form>
+
+  <script>
+    let interval; // Declare interval globally to be accessible in both functions
+
+    function msg() {
+      function updateProgressBar(percentage) {
+        const progressBar = document.getElementById('myProgressBar');
+        const progressDiv = document.getElementById('progressBar');
+        const progressValue = document.getElementById('progressValue');
+
+        if (progressBar) {
+          progressBar.value = percentage;
+        } else if (progressDiv) {
+          progressDiv.style.width = percentage + '%';
+        }
+
+        progressValue.textContent = percentage + '%';
+      }
+
+      let currentProgress = 0;
+      let paused = false;
+
+      interval = setInterval(() => {
+        if (currentProgress === 10 && !paused) {
+          paused = true;
+          setTimeout((msg) => {
+            paused = false;
+          }, 2000); // 1 second pause
+          return; // Skip this interval cycle
+        }
+
+        if (!paused) {
+          currentProgress += 10;
+          if (currentProgress <= 100) {
+            updateProgressBar(currentProgress);
+          } else {
+            clearInterval(interval);
+          }
+        }
+      }, 1000);
+    }
+
+    function resetProgressBar() {
+      const progressBar = document.getElementById('myProgressBar');
+      const progressDiv = document.getElementById('progressBar');
+      const progressValue = document.getElementById('progressValue');
+
+      if (progressBar) {
+        progressBar.value = 0;
+      } else if (progressDiv) {
+        progressDiv.style.width = '0%';
+      }
+
+      progressValue.textContent = '0%';
+
+      // Stop any ongoing interval
+      clearInterval(interval);
+    }
+  </script>
+</body>
+</html>

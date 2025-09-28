@@ -1,0 +1,118 @@
+<html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>About - Civic Reporting</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Arial, sans-serif;
+      margin: 0;
+      background: #f9f9f9;
+    }
+    nav {
+      background: #0a3d62;
+      padding: 16px 10px;
+      display: flex;
+      gap: 24px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+    nav a {
+      color: #fff;
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 1.1rem;
+      letter-spacing: 0.5px;
+      padding: 6px 12px;
+      border-radius: 3px;
+      transition: background 0.2s;
+    }
+    nav a:hover {
+      background: #145da0;
+      text-decoration: underline;
+    }
+    .gov-header {
+      text-align: center;
+      background: #eaf6ff;
+      padding: 32px 10px 16px 10px;
+      border-bottom: 2px solid #007bff;
+      margin-bottom: 24px;
+    }
+    .gov-header h1 {
+      color: #007bff;
+      font-size: 2.2rem;
+      margin: 0;
+      font-weight: bold;
+      letter-spacing: 1px;
+    }
+    .gov-header .subtitle {
+      color: #333;
+      font-size: 1.1rem;
+      margin-top: 8px;
+      font-style: italic;
+    }
+    .content {
+      background: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px 24px;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+      border: 1.5px solid #007bff;
+    }
+    .content h1 {
+      color: #007bff;
+      font-size: 1.5rem;
+      margin-bottom: 18px;
+      font-weight: bold;
+      text-align: left;
+    }
+    .content p {
+      color: #222;
+      font-size: 1.08rem;
+      line-height: 1.7;
+    }
+    .features-list {
+      margin-top: 18px;
+      padding-left: 22px;
+      color: #145da0;
+      font-size: 1rem;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="civic.html">Home</a>
+    <a href="about.html">About</a>
+    <a href="contact.html">Contact</a>
+    <a href="index.html" onclick="logout()">Logout</a>
+  </nav>
+
+  <div class="gov-header">
+    <h1>Civic Issue Portal</h1>
+    <div class="subtitle">An Official Government Citizen Reporting System</div>
+  </div>
+
+  <div class="content">
+    <h1>About This Project</h1>
+    <p>
+      The Civic Issue Reporting System allows citizens to report and vote on local issues
+      like potholes, streetlights, or garbage collection.  
+      It helps communities raise awareness and hold authorities accountable.
+    </p>
+    <ul class="features-list">
+      <li>Report civic problems directly to government authorities</li>
+      <li>Vote and support issues raised by others in your locality</li>
+      <li>Track the status of reported issues</li>
+      <li>Access contact information for relevant ministries</li>
+      <li>Secure citizen login and registration</li>
+    </ul>
+  </div>
+
+  <script>
+    function logout() { localStorage.clear(); window.location.href = "index.html"; }
+  </script>
+</body>
+</html>
